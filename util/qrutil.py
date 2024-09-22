@@ -1,5 +1,7 @@
 import re
+import threading
 from contextlib import contextmanager
+from queue import Empty, Queue
 from typing import Any, Generator, Optional
 
 import cv2
@@ -9,6 +11,37 @@ class StopDetection(Exception):
     pass
 
 
+class ThreadedVideoCapture:
+    def __init__(self, cam_index: int) -> None:
+        self.vcap = cv2.VideoCapture(cam_index)
+        self.frame_q = Queue()
+        self.stop_signal_q = Queue()
+        th = threading.Thread(target=self._reader, daemon=True)
+        th.start()
+
+    def _reader(self):
+        while True:
+            if not self.stop_signal_q.empty():  # when cancellation is requested
+                return
+
+            capture_ok, frame = self.vcap.read()
+            if not capture_ok:
+                break
+            if not self.frame_q.empty():
+                try:
+                    _ = self.frame_q.get_nowait()  # discard unprocessed frame
+                except Empty:
+                    pass
+            self.frame_q.put_nowait(frame)
+
+    def read(self):
+        return True, self.frame_q.get()
+
+    def release(self):
+        self.stop_signal_q.put("cancel")
+        self.vcap.release()
+
+
 class QRHandler:
     def __init__(self, cam_index: int) -> None:
         """:warning: This class is not intended to be instantiated directly.
@@ -16,7 +49,7 @@ class QRHandler:
         Args:
             cam_index (int): index of camera to use.
         """
-        self.vcap = cv2.VideoCapture(cam_index)
+        self.vcap = ThreadedVideoCapture(cam_index)
         self.qcd = cv2.QRCodeDetectorAruco()
         self.window_name = "QR Code Detector (Press q to exit)"
 
@@ -56,7 +89,7 @@ class QRHandler:
                 if cv2.waitKey(delay=1) & 0xFF == ord("q"):
                     raise StopDetection()
         finally:
-            cv2.destroyWindow(self.window_name)
+            cv2.destroyAllWindows()
 
 
 @contextmanager
