@@ -14,6 +14,7 @@ NFCリーダライタとしてSONYの[RC-S380](https://www.sony.co.jp/Products/f
 1. [nfcpyのサポートするデバイスの一覧](https://nfcpy.readthedocs.io/en/latest/overview.html#supported-devices)に記載されたデバイスを準備してください。
 2. Pythonプロジェクトマネージャーのuvを[Installation Guide](https://github.com/astral-sh/uv?tab=readme-ov-file#installation)に従ってインストールしてください。
 3. 【Windows環境のみ】[nfcpyの公式ドキュメント](https://nfcpy.readthedocs.io/en/latest/topics/get-started.html)に従ってWinUSBとlibusbをインストールしてください。
+
     > [!WARNING]
     > Mac/Linux環境の場合はlibusbが標準でインストールされていますが、バージョンが1.0.0以上であることを確認してください。
 4. 最後に、以下に従ってこのリポジトリをcloneし、仮想環境を作成してください。
