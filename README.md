@@ -17,6 +17,7 @@ NFCリーダライタとしてSONYの[RC-S380](https://www.sony.co.jp/Products/f
 
     > [!WARNING]
     > Mac/Linux環境の場合はlibusbが標準でインストールされていますが、バージョンが1.0.0以上であることを確認してください。
+
 4. 最後に、以下に従ってこのリポジトリをcloneし、仮想環境を作成してください。
     ```bash
     git clone https://github.com/t0d4/nfc-writer.git
