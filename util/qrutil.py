@@ -1,3 +1,4 @@
+import os
 import re
 import threading
 from contextlib import contextmanager
@@ -5,6 +6,8 @@ from queue import Empty, Queue
 from typing import Any, Generator, Optional
 
 import cv2
+
+os.environ["OPENCV_LOG_LEVEL"] = "OFF"  # suppress INFO logging
 
 
 class StopDetection(Exception):
