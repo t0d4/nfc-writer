@@ -78,7 +78,7 @@ def showrecords():
                     ":x: [bold red] このNFCタグにはNFC Data Exchange Format (NDEF)形式のレコードがありません"
                 )
             else:
-                console.print(records)
+                console.print(":card_file_box: 検出されたレコードのリスト", records)
 
 
 if __name__ == "__main__":
