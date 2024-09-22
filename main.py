@@ -61,7 +61,7 @@ def scanwrite(
             if not skip_test_after_write:
                 with console.status(
                     "[bold cyan] URIが正常に書き込まれたかチェックします。NFCタグをタッチしてください...",
-                    spinner_style="bold cyan",
+                    spinner="line",
                 ):
                     if nfc_handler.test_uri(uri=visitor_connpass_uri):
                         console.print(
