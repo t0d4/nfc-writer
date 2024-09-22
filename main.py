@@ -1,3 +1,5 @@
+from typing import Optional
+
 import typer
 from rich.console import Console
 from rich.rule import Rule
@@ -10,6 +12,9 @@ app = typer.Typer(add_completion=False)
 
 @app.command(help="カメラでQRコードをスキャンしてそのURIをNFCタグに書き込む")
 def scanwrite(
+    uri_pattern: Optional[str] = typer.Option(
+        default=None, help="検出されたURIがマッチすべき正規表現パターン"
+    ),
     skip_test_after_write: bool = typer.Option(
         default=False, help="書き込み後のテストをスキップする"
     ),
@@ -23,7 +28,7 @@ def scanwrite(
             ):
                 try:
                     visitor_connpass_uri = qr_handler.try_detect_with_camera(
-                        pattern=r"https://connpass.com/user/.+"
+                        pattern=uri_pattern
                     )
                 except qrutil.StopDetection:
                     console.print(":black_square_for_stop: 処理の中止が要求されました")
