@@ -1,11 +1,11 @@
-# NFC writer with rich output
+# NFC reader/writer utility with rich output, powered by nfcpy
 
 ## これは何？
 
 PyCon JP 2024の準備で使用するために作成したNFCリーダライタユーティリティです。
 カメラでQRコードを読み取り、そのQRコードをデコードして得られるURIをNFCタグに書き込むことが出来ます。
 
-![demo gif](https://github.com/user-attachments/assets/1956be69-70a9-45ed-aff1-19af2ffa8f66)
+![demo gif](https://github.com/user-attachments/assets/48ca0ad1-7b2a-48e1-aaf8-cf6779f9d5e4)
 
 NFCリーダライタとしてSONYの[RC-S380](https://www.sony.co.jp/Products/felica/consumer/products/RC-S380.html)を使って動作確認済みです。
 
