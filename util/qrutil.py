@@ -3,7 +3,7 @@ import re
 import threading
 from contextlib import contextmanager
 from queue import Empty, Queue
-from typing import Any, Generator, Optional
+from typing import Any, Generator, Literal, Optional
 
 import cv2
 
@@ -17,12 +17,12 @@ class StopDetection(Exception):
 class ThreadedVideoCapture:
     def __init__(self, cam_index: int) -> None:
         self.vcap = cv2.VideoCapture(cam_index)
-        self.frame_q = Queue()
-        self.stop_signal_q = Queue()
+        self.frame_q: Queue[cv2.typing.MatLike] = Queue()
+        self.stop_signal_q: Queue[str] = Queue()
         th = threading.Thread(target=self._reader, daemon=True)
         th.start()
 
-    def _reader(self):
+    def _reader(self) -> None:
         while True:
             if not self.stop_signal_q.empty():  # when cancellation is requested
                 return
@@ -37,10 +37,10 @@ class ThreadedVideoCapture:
                     pass
             self.frame_q.put_nowait(frame)
 
-    def read(self):
+    def read(self) -> tuple[Literal[True], cv2.typing.MatLike]:
         return True, self.frame_q.get()
 
-    def release(self):
+    def release(self) -> None:
         self.stop_signal_q.put("cancel")
         self.vcap.release()
 
@@ -56,7 +56,7 @@ class QRHandler:
         self.qcd = cv2.QRCodeDetectorAruco()
         self.window_name = "QR Code Detector (Press q to exit)"
 
-    def close(self):
+    def close(self) -> None:
         self.vcap.release()
 
     def try_detect_with_camera(self, pattern: Optional[str] = None) -> str:

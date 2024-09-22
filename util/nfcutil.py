@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Any, Callable, Generator
+from typing import Any, Callable, Generator, Literal
 
 from ndef import Record, UriRecord
 from nfc import ContactlessFrontend
@@ -21,7 +21,7 @@ class NFCHandler:
         if not self.clf.open("usb"):
             raise IOError("failed to open NFC reader/writer")
 
-    def close(self):
+    def close(self) -> None:
         self.clf.close()
 
     # def _get_startup_fn(self) -> Callable[[Tag], Tag]:
@@ -37,7 +37,7 @@ class NFCHandler:
     #     return release_fn
 
     def _get_writer_fn(self, record: Record) -> Callable[[Tag], bool]:
-        def writer_fn(tag: Tag):
+        def writer_fn(tag: Tag) -> Literal[True]:
             if not tag.ndef or not tag.ndef.is_writeable:
                 raise NDEFError("NDEF was not found or NDEF is not writeable")
 
@@ -49,7 +49,7 @@ class NFCHandler:
 
         return writer_fn
 
-    def write_uri(self, uri: str):
+    def write_uri(self, uri: str) -> None:
         """write provided URI to NFC tag.
 
         Args:
