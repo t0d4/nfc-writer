@@ -1,5 +1,3 @@
-from typing import Annotated, Optional
-
 import typer
 from rich.console import Console
 from rich.rule import Rule
@@ -11,7 +9,11 @@ app = typer.Typer(add_completion=False)
 
 
 @app.command(help="カメラでQRコードをスキャンしてそのURIをNFCタグに書き込む")
-def scanwrite(test_after_write: Annotated[Optional[bool], typer.Argument()] = True):
+def scanwrite(
+    skip_test_after_write: bool = typer.Option(
+        default=False, help="書き込み後のテストをスキップする"
+    ),
+):
     console = Console()
 
     with qrutil.get_handler() as qr_handler, nfcutil.get_handler() as nfc_handler:
@@ -45,7 +47,7 @@ def scanwrite(test_after_write: Annotated[Optional[bool], typer.Argument()] = Tr
                 else:
                     console.print(":white_check_mark: URIの書き込みが完了しました")
 
-            if test_after_write:
+            if not skip_test_after_write:
                 with console.status(
                     "[bold cyan] URIが正常に書き込まれたかチェックします。NFCタグをタッチしてください...",
                     spinner_style="bold cyan",
