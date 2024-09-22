@@ -36,7 +36,7 @@ uv run main.py COMMAND
 ```
 
 ```bash
-user@host ~/Works/nfc-writer $ uv run main.py --help
+user@host $ uv run main.py --help
 
  Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
