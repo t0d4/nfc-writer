@@ -1,6 +1,7 @@
 from typing import Optional
 
 import typer
+import validators
 from rich.console import Console
 from rich.rule import Rule
 
@@ -34,6 +35,11 @@ def scanwrite(
                     console.print(":black_square_for_stop: 処理の中止が要求されました")
                     return  # quit command
                 else:
+                    if not validators.url(visitor_connpass_uri):
+                        console.print(
+                            ":x: [bold red] このQRコードにはURLが含まれていません。QRコードのスキャンに戻ります..."
+                        )
+                        continue
                     console.print(
                         f":white_check_mark: URIを検出しました: {visitor_connpass_uri}"
                     )
